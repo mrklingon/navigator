@@ -15,10 +15,14 @@ let starship: game.LedSprite = null
 let motor = 0
 motor = 0
 starship = game.createSprite(0, 2)
-game.setLife(3)
+game.setLife(5)
 basic.forever(function () {
     if (motor == 1) {
         starship.move(1)
+        if (starship.isTouchingEdge()) {
+            game.addScore(1)
+            music.playTone(131, music.beat(BeatFraction.Sixteenth))
+        }
         starship.ifOnEdgeBounce()
         basic.pause(200)
     }
@@ -29,6 +33,10 @@ basic.forever(function () {
     asteroid.turn(Direction.Right, 180)
     for (let index = 0; index <= 4; index++) {
         asteroid.move(1)
+        if (asteroid.isTouching(starship)) {
+            game.removeLife(1)
+            music.playTone(988, music.beat(BeatFraction.Sixteenth))
+        }
         basic.pause(100)
     }
     asteroid.delete()
